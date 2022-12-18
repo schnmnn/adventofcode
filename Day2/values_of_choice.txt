@@ -1,0 +1,4 @@
+Name,opponents_choose_letter,your_choice_letter,Value_of_letter
+rock,A,X,1
+paper,B,Y,2
+scissors,C,Z,3

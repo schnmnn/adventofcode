@@ -1,0 +1,10 @@
+opponent_name,your_name,opponent_letter,your_choice_letter,Result
+Rock,Rock,A,X,draw
+Rock,Paper,A,Y,win
+Rock,Scissors,A,Z,lose
+Paper,Rock,B,X,lose
+Paper,Paper,B,Y,draw
+Paper,Scissors,B,Z,win
+Scissors,Rock,C,X,win
+Scissors,Paper,C,Y,lose
+Scissors,Scissors,C,Z,draw
