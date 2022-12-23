@@ -1,5 +1,6 @@
 import re
 
+
 with open('day4_input.txt', 'r') as f:
     elvish_work = f.read().split("\n")
 
