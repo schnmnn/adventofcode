@@ -1,0 +1,4 @@
+game_result_letter,result_name
+X,lose
+Y,draw
+Z,win

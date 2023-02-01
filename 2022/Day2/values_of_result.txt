@@ -1,0 +1,4 @@
+Result,Points
+win,6
+draw,3
+lose,0
