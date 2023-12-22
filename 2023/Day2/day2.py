@@ -1,4 +1,5 @@
 import re
+from functools import reduce
 
 with open('input.txt') as file:
     lines = [line.strip() for line in file]
@@ -7,7 +8,6 @@ with open('input.txt') as file:
 def create_dict_with_all_sets():
     # Initialize an empty dictionary to store color counts
     split_strings = [line.split(';') for line in lines]
-    color_counts = {}
     game_ids = []
     pattern = r"Game (\d+):"
     nested_dict = {}
@@ -48,7 +48,6 @@ def get_games_not_possible():
         for i in items:
             if type(i) != dict:
                 id = i
-                #print(id)
             elif type(i) == dict:
                 for enum, _ in enumerate(range(len(i))):
                     set_number = f'set{enum+1}'
@@ -83,3 +82,45 @@ def calculate_possible_games():
     return sum_all - sum_not_possible
 
 print(f'Answer one is {calculate_possible_games()}')
+
+
+def get_fewest_color():
+    fewest_colors = {}
+    nested_dict = create_dict_with_all_sets()[0]
+    for items in nested_dict.items():
+        for i in items:
+            if type(i) != dict:
+                id = i
+                fewest_colors[id] = {'red':0,'blue':0,'green':0}
+            elif type(i) == dict:
+                for enum, _ in enumerate(range(len(i))):
+                        set_number = f'set{enum+1}'
+                        # fewest_colors[id]['red'] = 0
+                        # fewest_colors[id]['blue'] = 0
+                        # fewest_colors[id]['green'] = 0
+                        for k,v in i[set_number].items():
+                            if k == 'red' and int(v) > int(fewest_colors[id]['red']):
+                                fewest_colors[id]['red'] = v
+                            elif k == 'green' and int(v) > int(fewest_colors[id]['green']):
+                                fewest_colors[id]['green'] = v
+                            elif k == 'blue' and int(v) > int(fewest_colors[id]['blue']):
+                                fewest_colors[id]['blue'] = v
+    return fewest_colors
+
+
+def get_multiplied_values():
+    list_multiplied_values = []
+    fewest_colors = get_fewest_color()
+    for k,v in fewest_colors.items():
+        counter = 0
+        limit = 2
+        multiply_list = []
+        for k1, v1 in v.items():
+            multiply_list.append(v1)
+            if counter < limit:
+                counter += 1
+        result = reduce(lambda x, y: int(x) * int(y), multiply_list)
+        list_multiplied_values.append(result)
+    return list_multiplied_values
+
+print(f'Answer two is {sum(get_multiplied_values())}')
