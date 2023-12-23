@@ -14,10 +14,8 @@ def get_character_positions():
         # Iterate through each column in the row
         for j in range(len(grid[i])):
             char = grid[i][j]
-            #print(char)
             # Check if the current character is a number
             if char.isdigit():
-                #print(char)
                 number_positions.append((i, j))
             # Check if the current character is not a dot and not a digit
             elif char != '.':
@@ -51,7 +49,8 @@ def get_numbers_and_positions():
     adjacent_number_positions = set()
 
     # Iterate over each non-dot character
-    for row, col in get_character_positions()[0]:
+    character_list = get_character_positions()[0]
+    for row, col in character_list:
         # Get all valid neighbors
         neighbors = get_neighbors(row, col, len(grid), len(grid[0]))
         # Check each neighbor
@@ -101,3 +100,83 @@ def sum_up_numbers():
     return sum
 
 print(f'Answer one is {sum_up_numbers()}')
+
+
+
+def get_numbers_and_positions_part_two():
+    # Set to store unique adjacent numbers
+    adjacent_numbers = set()
+    adjacent_number_positions = set()
+
+    # Iterate over each non-dot character
+    character_list = get_character_positions()[2]
+    for row, col in character_list:
+        # Get all valid neighbors
+        neighbors = get_neighbors(row, col, len(grid), len(grid[0]))
+        # Check each neighbor
+        for nr, nc in neighbors:
+            if grid[nr][nc].isdigit():
+                adjacent_numbers.add(grid[nr][nc])
+                adjacent_number_positions.add((grid[nr][nc], (nr, nc),(row,col)))
+    return adjacent_numbers, adjacent_number_positions
+
+
+def get_full_number_with_position():
+    # Using the adjacent_number_positions from earlier
+    full_numbers_with_positions = set()
+    for _, pos,asterisk in get_numbers_and_positions_part_two()[1]:
+        full_number, start_pos, end_pos = get_full_number_horizontal(grid, pos[0], pos[1])
+        full_numbers_with_positions.add((full_number, start_pos, end_pos,asterisk))
+
+    return full_numbers_with_positions
+
+def create_list_with_asterisk_position():
+    list_occurence = []
+    for i in get_full_number_with_position():
+        if i[3] in get_character_positions()[2]:
+            list_occurence.append(i[3])
+    return list_occurence
+
+def get_two_occurences():
+    count_occurence = []
+    from collections import Counter
+    # Counting the elements
+    count = Counter(create_list_with_asterisk_position())
+
+    # Displaying the count of each element
+    for element, frequency in count.items():
+        if frequency == 2:
+            count_occurence.append(element)
+    return count_occurence
+
+def create_dict_with_two_occurences():
+    new_dict = {}
+    for i in get_two_occurences():
+        new_dict[i] = []
+    return new_dict
+
+def assign_values_to_dict():
+    new_dict = create_dict_with_two_occurences()
+    for i in get_full_number_with_position():
+        num = i[0]
+        if i[3] in get_two_occurences():
+            new_dict[i[3]].append(num)
+    return new_dict
+
+def multiply_values():
+    new_dict = assign_values_to_dict()
+    for key in new_dict:
+        product = 1
+        for num_str in new_dict[key]:
+            product *= int(num_str)
+        new_dict[key] = product
+    return new_dict
+
+def calculate_sum():
+    sum = 0
+    new_dict = multiply_values()
+    for k,v in new_dict.items():
+        sum = sum + v
+    return sum
+
+print(f'Answer two is {calculate_sum()}')
