@@ -68,3 +68,25 @@ def calc_points():
     return sum_points
 
 print(f'Answer one is {sum(calc_points())}')
+
+def answer_two():
+    game_dict = delete_empty_strings()
+    points = calc_correct_numbers()
+    games = []
+    for i in range(len(game_dict)):
+        games.append(1)
+
+    length = len(games)
+    counter = 0
+    for i in range(length):
+        counter = 0
+        # Get the value of the current element
+        value = points[i]
+        while counter < games[i]:
+            counter += 1
+            for j in range(i, i + value):
+                if j < length:
+                    games[j+1] += 1
+    return games
+
+print(f'Answer two is {sum(answer_two())}')
